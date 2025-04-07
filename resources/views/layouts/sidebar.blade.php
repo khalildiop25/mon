@@ -5,58 +5,89 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">SUNU KALPE</sup></div>
     </a>
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
     <div class="sidebar-heading">
-        Interface
+     ADMINISTRATEUR
     </div>
 
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
-            </div>
+    <!-- Nav Item - Tontines -->
+    <li class="nav-item active">
+    <a class="nav-link" href="#" data-toggle="collapse" data-target="#c" aria-expanded="true"
+        aria-controls="collapsePages">
+        <i class="fas fa-fw fa-users"></i>
+        <span>Gérer les Tontines</span>
+    </a>
+    <div id="c" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Gestion des Tontines:</h6>
+            <a class="collapse-item" href="{{ route('tontines.index') }}">Liste des Tontines</a>
+            <a class="collapse-item" href="{{ route('tontines.create') }}">Créer une Tontine</a>
+            
+          
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Autres Pages:</h6>
+            <a class="collapse-item" href="404.html">Page 404</a>
+            <a class="collapse-item active" href="blank.html">Page Blanche</a>
         </div>
-    </li>
+    </div>
+</li>
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
+
+    
+<!-- Nav Item - participant-->
+<li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#participant" aria-expanded="true" 
+        aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-user-friends"></i>
+        <span>Gérer les Participants</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+        <div id="participant" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
+                <a class="collapse-item" href="{{ route('participants.index') }}">affiche participants</a>
+                <a class="collapse-item" href="{{ route('admin.participants.create') }}">enregistrer participant</a>
+                
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - cotisation -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#cotisation"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>gerer cotisation</span>
+        </a>
+        <div id="cotisation" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Utilities:</h6>
+                <a class="collapse-item" href="{{ route('cotisations.index') }}">cotisations disponibe</a>
+                <a class="collapse-item" href="{{ route('admin.participants.create') }}">cotisation participants</a>
+                
+            </div>
+        </div>
+    </li>
+<!-- Nav Item - tirage-->
+<li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tirage" aria-expanded="true" 
+        aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-user-friends"></i>
+        <span>Gérer Tirage</span>
+        </a>
+        <div id="tirage" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Utilities:</h6>
+                <a class="collapse-item" href="utilitie.html">affiche tirages d'un utilisateur</a>
+                <a class="collapse-item" href="utilities-border.html">affiche tirages d'un tontine</a>
+                <a class="collapse-item" href="utilities-animation.html">Enregistrer tirage</a>
             </div>
         </div>
     </li>
@@ -66,36 +97,23 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Addons
+        UTITLISATEUR
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item active">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-            aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item active" href="blank.html">Blank Page</a>
-            </div>
-        </div>
-    </li>
+    <a class="nav-link" href="{{ auth()->check() ? route('participant.tontines', auth()->user()->id) : 'page2.auth.auth' }}" >
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Mes tontines</span>
+    </a>
+</li>
+
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
+            <span>tontines disponible</span></a>
     </li>
 
     <!-- Nav Item - Tables -->

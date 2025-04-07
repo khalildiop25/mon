@@ -18,9 +18,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'prenom',
+        'nom',
+        'telephone',
         'email',
+        'email_verified_at',
         'password',
+        'profil'
     ];
 
     /**
@@ -45,4 +49,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function participant()
+{
+    return $this->hasOne(Participant::class, 'idUser');
+}
+public function cotisations()
+{
+    return $this->hasMany(Cotisation::class, 'idUser');
+}
 }

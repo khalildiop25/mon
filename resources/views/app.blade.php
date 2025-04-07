@@ -19,17 +19,21 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!--a href="{{ route('tontines.index') }}" class="btn btn-primary">Voir la liste des tontines</a>
+
 
 </head>
 
 <body id="page-top">
+    
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
-        @include('layouts.sidebar')
-        <!-- End of Sidebar -->
+        
+        <!-- Sidebar visible uniquement pour les utilisateurs ayant le rôle GERANT 
+        ggggggg@if(Auth::check() && Auth::user()->profil == 'GERANT') -->
+            @include('layouts.sidebar')  <!-- Inclut le sidebar uniquement pour les GERANT
+        fffff@endif -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -45,8 +49,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    @yield('contenu')
-
+                 @yield('content', view('welcome')) <!-- Affiche la vue 'home' par défaut si aucun contenu n'est spécifié -->
                 </div>
                 <!-- /.container-fluid -->
 
