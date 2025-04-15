@@ -1,0 +1,3 @@
+@echo off
+C:\projetClone\tp-framework-tontine-app-2025
+php artisan tirage:execute >> tirage.log

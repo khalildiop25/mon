@@ -13,7 +13,12 @@
                     <div class="row align-items-center">
                         <!-- Image CNI à gauche -->
                         <div class="col-md-3">
-                            <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}" alt="Image CNI" class="img-fluid w-100" style="max-width: 200px; border-radius: 8px;">
+                        @if(Auth::user()->participant && Auth::user()->participant->imageCni)
+    <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}" alt="Image CNI" class="img-fluid w-100" style="max-width: 200px; border-radius: 8px;">
+@else
+    <p class="text-muted">Aucune image CNI disponible.</p>
+@endif
+
                         </div>
                         <!-- Texte à droite -->
                         <div class="col-md-9">
@@ -59,7 +64,7 @@
                                 <div class="row">
                             @endif
                             <div class="col-md-4 mb-4">
-                                <a href="{{ route('tontines.show', $tontine->id) }}" class="btn btn-primary w-100">
+                                <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100">
                                     Tontine: {{ $tontine->libelle }}
                                 </a>
                             </div>

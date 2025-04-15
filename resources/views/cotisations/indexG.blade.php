@@ -18,15 +18,15 @@
                 <th>Tontine</th>
                 <th>Montant</th>
                 <th>Moyen de paiement</th>
-                <th>Etat du paiement</th>
+                <th>État du paiement</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($cotisations as $cotisation)
+            @forelse ($cotisations as $cotisation)
                 <tr>
                     <td>{{ $cotisation->id }}</td>
-                    <td>{{ $cotisation->user->nom }}</td>
+                    <td>{{ $cotisation->user->id }}</td>
                     <td>{{ $cotisation->tontine->libelle }}</td>
                     <td>{{ $cotisation->montant }} FCFA</td>
                     <td>{{ $cotisation->moyen_paiement }}</td>
@@ -57,7 +57,11 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center text-muted">Aucune cotisation disponible pour le moment.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

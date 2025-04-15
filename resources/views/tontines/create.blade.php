@@ -61,7 +61,8 @@
             <textarea name="description" class="form-control" id="description">{{ old('description') }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Créer la Tontine</button>
+        <button type="submit" class="btn bg-gold text-white">Créer la Tontine</button>
+
     </form>
 </div>
 @endsection

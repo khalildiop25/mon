@@ -47,7 +47,7 @@
             <label for="moyen_paiement" class="form-label">Mode de paiement</label>
             <select name="moyen_paiement" id="moyen_paiement" class="form-control" required>
                 <option value="" disabled selected>Sélectionner le mode de paiement</option>
-                <option value="Wave" {{ old('moyen_paiement') == 'Wave' ? 'selected' : '' }}>Wave</option>
+                <option value="WAVE" {{ old('moyen_paiement') == 'WAVE' ? 'selected' : '' }}>WAVE</option>
                 <option value="OM" {{ old('moyen_paiement') == 'OM' ? 'selected' : '' }}>OM</option>
             </select>
         </div>

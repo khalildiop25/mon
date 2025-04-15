@@ -19,7 +19,25 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-    <!--a href="{{ route('tontines.index') }}" class="btn btn-primary">Voir la liste des tontines</a>
+    <!--a href="{{ route('tontines.index') }}" class="btn btn-primary">Voir la liste des tontines</a>-->
+<style>
+    .bg-gold {
+        background-color: #DAA520 !important;
+    }
+    /* Change la couleur du texte en doré */
+    .navbar-gold a.nav-link,
+    .navbar-gold .dropdown-item {
+        color: #DAA520 !important;
+    }
+
+    /* Optionnel : Changer la couleur au survol */
+    .navbar-gold a.nav-link:hover,
+    .navbar-gold .dropdown-item:hover {
+        color: #e6c200 !important;
+    }
+</style>
+
+</style>
 
 
 </head>
@@ -30,10 +48,10 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         
-        <!-- Sidebar visible uniquement pour les utilisateurs ayant le rôle GERANT 
-        ggggggg@if(Auth::check() && Auth::user()->profil == 'GERANT') -->
-            @include('layouts.sidebar')  <!-- Inclut le sidebar uniquement pour les GERANT
-        fffff@endif -->
+        <!-- Sidebar visible uniquement pour les utilisateurs ayant le rôle GERANT -->
+        @if(Auth::check() && Auth::user()->profil == 'GERANT') 
+            @include('layouts.sidebar')  <!-- Inclut le sidebar uniquement pour les GERANT-->
+        @endif 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -101,6 +119,9 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
+    @yield('scripts')
+
+    
 </body>
 
 </html>

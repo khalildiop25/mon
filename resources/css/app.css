@@ -1,3 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.bg-gold {
+    background-color: #FFD700 !important; /* Couleur dorée */
+}

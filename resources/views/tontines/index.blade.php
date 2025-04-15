@@ -19,7 +19,7 @@
     @else
         <!-- Tableau des tontines -->
         <div class="mb-3">
-            <a href="{{ route('tontines.create') }}" class="btn btn-primary">Créer une Tontine</a>
+            <a href="{{ route('tontines.create') }}" class="btn bg-gold text-white">Créer une Tontine</a>
         </div>
 
         <table class="table table-striped">
@@ -46,22 +46,31 @@
                         <td>{{ number_format($tontine->montant_total, 2, ',', ' ') }} FCFA</td>
                         <td>{{ $tontine->nbreParticipant }}</td>
                         <td>
-                            <!-- Lien pour voir les détails -->
-                            <a href="{{ route('tontines.show', $tontine->id) }}" class="btn btn-info btn-sm">Voir</a>
+    <div class="container px-0">
+        <div class="row mb-1">
+            <div class="col-6 pr-1">
+                <a href="{{ route('tontines.show', $tontine->id) }}" class="btn btn-info btn-sm w-100">Voir</a>
+            </div>
+            <div class="col-6 pl-1">
+                <a href="{{ route('tontines.participants', $tontine->id) }}" class="btn btn-primary btn-sm w-100">Participants</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 pr-1">
+                <a href="{{ route('tontines.edit', $tontine->id) }}" class="btn btn-warning btn-sm w-100">Modifier</a>
+            </div>
+            <div class="col-6 pl-1">
+                <form action="{{ route('tontines.destroy', $tontine->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tontine ?')">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</td>
 
-                            <!-- Lien pour afficher les participants -->
-                            <a href="{{ route('tontines.participants', $tontine->id) }}" class="btn btn-primary btn-sm">Participants</a>
 
-                            <!-- Lien pour éditer -->
-                            <a href="{{ route('tontines.edit', $tontine->id) }}" class="btn btn-warning btn-sm">Modifier</a>
-
-                            <!-- Formulaire pour supprimer -->
-                            <form action="{{ route('tontines.destroy', $tontine->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tontine ?')">Supprimer</button>
-                            </form>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>

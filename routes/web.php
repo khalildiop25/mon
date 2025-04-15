@@ -38,8 +38,7 @@ Route::get('tontines/{id}/participants', [TontineController::class, 'participant
 //cotisation
 Route::get('/participant/{participantId}/cotisations', [CotisationController::class, 'index'])->name('cotisations.Participant');
 Route::get('/cotisations/create', [CotisationController::class, 'create'])->name('cotisations.create');
-// Route pour afficher les cotisations d'un utilisateur spécifique
-Route::get('cotisations/user/{id}', [CotisationController::class, 'showUserCotisations'])->name('cotisations.user');
+
 /// Affichage des cotisations non payées
 Route::get('/cotisations', [CotisationController::class, 'indexG'])->name('cotisations.index');
 
@@ -48,11 +47,22 @@ Route::patch('/cotisations/valider/{id}', [CotisationController::class, 'valider
 
 // Annuler une cotisation
 Route::patch('/cotisations/annuler/{id}', [CotisationController::class, 'annuler'])->name('cotisations.annuler');
-
-
-Route::get('/tontine/{tontineId}', [CotisationController::class, 'showIndex'])->name('cotisations.tontine');
+Route::get('/tontines', [CotisationController::class, 'showAllTontines'])->name('cotisations.tontines.list');
 Route::post('/cotisations', [CotisationController::class, 'store'])->name('cotisations.store');
-Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::get('/notifications', [CotisationController::class, 'index'])->name('notifications.index');
+Route::get('/tontine/{tontineId}/cotisations', [CotisationController::class, 'showIndex'])->name('cotisations.tontine');
+// Route pour afficher toutes les tontines (sans filtrage des cotisations manquantes)
+Route::get('/cotisations/tontines', [CotisationController::class, 'indexTontines'])->name('cotisations.tontines2');
+
+// Route pour afficher tous les participants d'une tontine spécifique (sans filtrage des cotisations manquantes)
+Route::get('/tontine/{tontineId}/participants', [CotisationController::class, 'participants'])->name('cotisations.tontine.participants');
+Route::get('/participant/{participantId}/dates-manquantes', [CotisationController::class, 'getDatesManquantes']);
+// Voir les tontines du participant connecté (état des cotisations)
+Route::get('/mes-cotisations/tontines', [CotisationController::class, 'mesTontines'])->name('cotisations.user');
+Route::get('/mes-cotisations/tontine/{tontineId}', [CotisationController::class, 'cotisationsParTontine'])->name('cotisations.user.tontine');
+
+Route::get('/cotisations/manquantes/{participantId}', [CotisationController::class, 'cotisationsManquantes'])->name('cotisations.user.manquantes');
+
 
 
 
@@ -87,8 +97,21 @@ Route::get('tontines/{idTontine}/images', [ImageController::class, 'index'])->na
 Route::delete('images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
 
 //tirage
-Route::get('/user/{userId}', [TirageController::class, 'showUser'])->name('tirages.user');
+Route::get('/tirages/participer', [TirageController::class, 'participerForm'])->name('tirage.form');
+
 Route::get('/tontine/{tontineId}', [TirageController::class, 'showTontineTirages'])->name('tirages.tontine');
 Route::get('tirages/create', [TirageController::class, 'create'])->name('tirages.create');
 Route::post('/', [TirageController::class, 'store'])->name('tirages.store');
+// Affiche le formulaire de tirage
+Route::get('/tirages/form', [TirageController::class, 'form'])->name('tirages.form');
+// Effectue le tirage
+Route::post('/tirage', [TirageController::class, 'tirer'])->name('tirage.effectuer');
+// Route pour afficher le gagnant du dernier tirage d'une tontine
+Route::get('tirages/{tontineId}/gagnant', [TirageController::class, 'showLastWinner'])->name('tirages.gagnant');
+Route::get('/tirages/resultats', [TirageController::class, 'resultats'])->name('tirages.resultats');
+Route::get('/test-notif', function () {
+    $user = \App\Models\User::find(1); // Remplace 1 par l'ID du user que tu veux tester
+    $user->notify(new \App\Notifications\TirageResultNotification(null, $user));
 
+    return 'Notification envoyée !';
+});
