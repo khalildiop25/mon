@@ -58,18 +58,27 @@
                     <p class="text-center fs-3">Aucune tontine n'est disponible pour l'instant.</p>
                 @else
                     <div class="row">
-                        @foreach($tontines as $index => $tontine)
-                            @if($index % 3 == 0 && $index != 0)
-                                </div>
-                                <div class="row">
-                            @endif
-                            <div class="col-md-4 mb-4">
-                                <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100">
-                                    Tontine: {{ $tontine->libelle }}
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+    @foreach($tontines as $index => $tontine)
+        @if($index % 3 == 0 && $index != 0)
+            </div><div class="row">
+        @endif
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                @if($tontine->images->isNotEmpty())
+                <p>{{ $tontine->images->first()->nomImage }}</p>
+                    <img src="{{ asset('storage/' . $tontine->images->first()->nomImage) }}" class="card-img-top" alt="Image de la tontine" style="height: 200px; object-fit: cover;">
+                @else
+                    <img src="{{ asset('images/default-tontine.jpg') }}" class="card-img-top" alt="Image par défaut" style="height: 200px; object-fit: cover;">
+                @endif
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ $tontine->libelle }}</h5>
+                    <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100">Voir la Tontine</a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
                 @endif
             </div>
             @endif
@@ -100,16 +109,24 @@
                     <p class="text-center fs-3">Aucune tontine n'est disponible pour l'instant.</p>
                 @else
                     <div class="row">
-                        @foreach($tontines as $index => $tontine)
-                            @if($index % 3 == 0 && $index != 0)
-                                </div>
-                                <div class="row">
-                            @endif
-                            <div class="col-md-4 mb-4">
-                                <a href="{{ route('tontines.show', $tontine->id) }}" class="btn btn-primary w-100">
-                                    Tontine: {{ $tontine->libelle }}
-                                </a>
-                            </div>
+    @foreach($tontines as $index => $tontine)
+        @if($index % 3 == 0 && $index != 0)
+            </div><div class="row">
+        @endif
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                @if($tontine->images->isNotEmpty())
+                <p>{{ $tontine->images->first()->nomImage }}</p>
+                    <img src="{{ asset('storage/' . $tontine->images->first()->nomImage) }}" class="card-img-top" alt="Image de la tontine" style="height: 200px; object-fit: cover;">
+                @else
+                    <img src="{{ asset('images/default-tontine.jpg') }}" class="card-img-top" alt="Image par défaut" style="height: 200px; object-fit: cover;">
+                @endif
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ $tontine->libelle }}</h5>
+                    <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100">Voir la Tontine</a>
+                </div>
+            </div>
+        </div>
                         @endforeach
                     </div>
                 @endif

@@ -43,4 +43,9 @@ class Tontine extends Model
     {
         return $this->belongsToMany(Participant::class, 'tontine_participant', 'tontine_id', 'participant_id');
     }
+    public function images()
+{
+    return $this->hasMany(Image::class, 'idTontine');
+}
+
 }

@@ -29,6 +29,7 @@
             <h6 class="collapse-header">Gestion des Tontines:</h6>
             <a class="collapse-item" href="{{ route('tontines.index') }}">Liste des Tontines</a>
             <a class="collapse-item" href="{{ route('tontines.create') }}">Créer une Tontine</a>
+            <a class="collapse-item" href="{{ route('images.create') }}">insert image</a>
         </div>
     </div>
 </li>

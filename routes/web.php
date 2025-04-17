@@ -91,7 +91,7 @@ Route::post('/participants/{participantId}/detach', [ParticipantController::clas
 
 // image
 Route::post('/profile/upload-photo', [ImageController::class, 'uploadPhoto'])->name('profile.uploadPhoto');
-Route::get('tontines/{idTontine}/images/create', [ImageController::class, 'create'])->name('images.create');
+Route::get('tontines/images/create', [ImageController::class, 'create'])->name('images.create');
 Route::post('tontines/{idTontine}/images', [ImageController::class, 'store'])->name('images.store');
 Route::get('tontines/{idTontine}/images', [ImageController::class, 'index'])->name('images.index');
 Route::delete('images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');

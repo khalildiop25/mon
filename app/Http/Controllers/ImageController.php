@@ -49,69 +49,74 @@ class ImageController extends Controller
     /**
      * Affiche le formulaire pour télécharger une image pour une tontine spécifique
      */
-    public function create($idTontine)
+   /**
+     * Affiche la liste des tontines avec formulaire d'ajout d'image pour chacune.
+     */
+    public function create()
     {
-        $tontine = Tontine::findOrFail($idTontine); // Récupère la tontine
-        return view('images.create', compact('tontine'));
+        $tontines = Tontine::all(); // Récupérer toutes les tontines
+        return view('images.create', compact('tontines'));
     }
 
     /**
      * Enregistre une nouvelle image pour une tontine spécifique
      */
-    public function store(Request $request, $idTontine)
-    {
-        // Validation de l'image téléchargée
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+   
+public function store(Request $request, $idTontine)
+{
+    // Validation de l'image
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    // Vérifier si une image a été téléchargée
+    if ($request->hasFile('image')) {
+        $tontine = Tontine::findOrFail($idTontine);
+
+        // 📦 Stocker l'image dans "public/images_tontines"
+        $path = $request->file('image')->store('images_tontines', 'public');
+
+        // 🗂 Enregistrer le chemin de l'image dans la base
+        Image::create([
+            'idTontine' => $tontine->id,
+            'nomImage' => $path, // ici on stocke le chemin, pas juste le nom du fichier
         ]);
 
-        // Gérer l'upload de l'image
-        if ($request->hasFile('image')) {
-            // Générer un nom unique pour l'image
-            $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('images/tontines'), $imageName); // Déplacer l'image dans le dossier
-
-            // Enregistrement de l'image dans la base de données
-            $image = new Image();
-            $image->idTontine = $idTontine;  // Lier l'image à la tontine
-            $image->nomImage = $imageName;   // Enregistrer le nom de l'image
-            $image->save();
-
-            // Retourner une réponse ou rediriger
-            return redirect()->route('tontines.show', $idTontine)->with('success', 'Image téléchargée avec succès.');
-        }
-
-        // Si aucune image n'est téléchargée
-        return back()->with('error', 'Aucune image n\'a été téléchargée.');
+        return redirect()->back()->with('success', 'Image téléchargée avec succès.');
     }
 
+    return redirect()->back()->with('error', 'Aucune image n\'a été téléchargée.');
+}
+
+
     /**
-     * Affiche toutes les images associées à une tontine spécifique
+     * Affiche les images d'une tontine
      */
     public function index($idTontine)
     {
-        $tontine = Tontine::findOrFail($idTontine);  // Récupérer la tontine
-        $images = $tontine->images;  // Récupérer les images associées à la tontine
+        $tontine = Tontine::findOrFail($idTontine);
+        $images = $tontine->images;
 
-        return view('images.index', compact('images', 'tontine'));  // Passer les données à la vue
+        return view('images.index', compact('images', 'tontine'));
     }
 
     /**
-     * Supprime une image spécifique
+     * Supprime une image
      */
     public function destroy($id)
     {
-        $image = Image::findOrFail($id);  // Récupérer l'image
-        $imagePath = public_path('images/tontines/'.$image->nomImage);  // Chemin complet du fichier
+        $image = Image::findOrFail($id);
+        $imagePath = public_path('images/tontines/' . $image->nomImage);
 
-        // Vérifier si le fichier existe avant de le supprimer
         if (File::exists($imagePath)) {
-            File::delete($imagePath);  // Supprimer le fichier
+            File::delete($imagePath);
         }
 
-        // Supprimer l'enregistrement dans la base de données
         $image->delete();
 
         return back()->with('success', 'Image supprimée avec succès.');
     }
+
+    ////image tontine
+    
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idTontine');
             $table->string('nomImage');
             $table->timestamps();
+            
 
             $table->foreign('idTontine')->references('id')->on('tontines');
         });

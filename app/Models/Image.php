@@ -18,4 +18,5 @@ class Image extends Model
     {
         return $this->belongsTo(Tontine::class, 'idTontine');
     }
+    
 }
