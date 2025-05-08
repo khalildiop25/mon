@@ -27,12 +27,22 @@ class TirageResultNotification extends Notification
     }
 
     public function toDatabase($notifiable)
-    {
+{
+    // Vérifie que les données sont bien présentes
+    if (!$this->tontine || !$this->gagnant) {
         return [
-            'message' => "Félicitations! Le tirage pour la tontine '{$this->tontine->libelle}' a été effectué. Le gagnant est {$this->gagnant->name}.",
-            'tontine_id' => $this->tontine->id,
-            'gagnant_id' => $this->gagnant->id,
+            'message' => '⚠️ Erreur : données manquantes pour générer la notification du tirage.',
+            'tontine_id' => null,
+            'gagnant_id' => null,
         ];
     }
+
+    return [
+        'message' => "🎉 Félicitations ! Le tirage pour la tontine '{$this->tontine->libelle}' a été effectué. Le gagnant est {$this->gagnant->name}.",
+        'tontine_id' => $this->tontine->id,
+        'gagnant_id' => $this->gagnant->id,
+    ];
+}
+
 }
 

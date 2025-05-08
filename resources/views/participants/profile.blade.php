@@ -1,94 +1,76 @@
 @extends('app')
 
 @section('content')
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <!-- Card pour afficher les informations du profil -->
-                <div class="card">
-                    <div class="card-header">{{ __('Profil Utilisateur') }}</div>
-
-                    <div class="card-body">
-                        <!-- Informations de l'utilisateur -->
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nom') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="name" value="{{ Auth::user()->nom }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" id="email" value="{{ Auth::user()->email }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="prenom" class="col-md-4 col-form-label text-md-end">{{ __('Prénom') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="prenom" value="{{ Auth::user()->prenom }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="telephone" class="col-md-4 col-form-label text-md-end">{{ __('Téléphone') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="telephone" value="{{ Auth::user()->telephone }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="dateNaissance" class="col-md-4 col-form-label text-md-end">{{ __('Date de Naissance') }}</label>
-                            <div class="col-md-6">
-                                <input type="date" class="form-control" id="dateNaissance" value="{{ Auth::user()->participant->dateNaissance }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="cni" class="col-md-4 col-form-label text-md-end">{{ __('CNI') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="cni" value="{{ Auth::user()->participant->cni }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="adresse" class="col-md-4 col-form-label text-md-end">{{ __('Adresse') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="adresse" value="{{ Auth::user()->participant->adresse }}" readonly>
-                            </div>
-                        </div>
-
-                        <!-- Affichage de la photo de profil -->
-                        <div class="row mb-3">
-                            <label for="photo" class="col-md-4 col-form-label text-md-end">{{ __('Photo de Profil') }}</label>
-                            <div class="col-md-6">
-                                @if(Auth::user()->participant->imageCni)
-                                    <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}" alt="Photo de profil" class="img-fluid rounded" style="width: 150px;">
-                                @else
-                                    <p>Pas de photo de profil.</p>
-                                @endif
-                                <!-- Formulaire pour télécharger une nouvelle photo -->
-                                <form action="{{ route('profile.uploadPhoto') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="file" name="photo" class="form-control" required>
-                                    <button type="submit" class="btn btn-success mt-3">Télécharger la photo</button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Ajouter un bouton pour modifier le profil -->
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <a href="{{ route('settings',  auth()->user()->participant->id) }}" class="btn btn-primary">
-                                    {{ __('Modifier le Profil') }}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-gold text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="fas fa-user-circle mr-2"></i> Profil Utilisateur</h4>
+                    <a href="{{ url()->previous() }}" class="btn btn-outline-light btn-sm">
+                                 <i class="fas fa-arrow-left me-1"></i>Retour
                                 </a>
-                            </div>
+                    <a href="{{ route('settings', auth()->user()->participant->id) }}" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-edit mr-1"></i>Modifier
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    {{-- Informations personnelles --}}
+                    <div class="row">
+                        <div class="col-md-8">
+                            @foreach ([
+                                'Nom' => Auth::user()->nom,
+                                'Prénom' => Auth::user()->prenom,
+                                'Email' => Auth::user()->email,
+                                'Téléphone' => Auth::user()->telephone,
+                                'Date de Naissance' => Auth::user()->participant->dateNaissance,
+                                'CNI' => Auth::user()->participant->cni,
+                                'Adresse' => Auth::user()->participant->adresse,
+                            ] as $label => $value)
+                                <div class="form-group row mb-3">
+                                    <label class="col-md-4 col-form-label text-md-right font-weight-bold">{{ $label }}</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control-plaintext" value="{{ $value }}" readonly>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
-                    </div>
+                        {{-- Photo de profil + upload --}}
+                        <div class="col-md-4 text-center">
+                            <label class="font-weight-bold d-block mb-2">Photo de Profil</label>
+                            @if(Auth::user()->participant->imageCni)
+                                <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}"
+                                     alt="Photo de profil" class="img-thumbnail mb-3" style="max-width: 150px;">
+                            @else
+                                <p class="text-muted">Pas de photo de profil.</p>
+                            @endif
+
+                            <form action="{{ route('profile.uploadPhoto') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="file" name="photo" class="form-control-file" required>
+                                    <button type="submit" class="btn btn-success btn-sm mt-2">
+                                        <i class="fas fa-upload mr-1"></i>Télécharger
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div> {{-- fin .row --}}
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+{{-- Custom styles --}}
+<style>
+    .bg-gold {
+        background-color: #DAA520;
+    }
+    .text-gold {
+        color: #DAA520;
+    }
+</style>
 @endsection

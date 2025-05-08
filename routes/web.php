@@ -62,7 +62,7 @@ Route::get('/mes-cotisations/tontines', [CotisationController::class, 'mesTontin
 Route::get('/mes-cotisations/tontine/{tontineId}', [CotisationController::class, 'cotisationsParTontine'])->name('cotisations.user.tontine');
 
 Route::get('/cotisations/manquantes/{participantId}', [CotisationController::class, 'cotisationsManquantes'])->name('cotisations.user.manquantes');
-
+Route::post('/cotisations/manquante', [CotisationController::class, 'storeManquante'])->name('cotisations.storeManquante');
 
 
 
@@ -109,9 +109,3 @@ Route::post('/tirage', [TirageController::class, 'tirer'])->name('tirage.effectu
 // Route pour afficher le gagnant du dernier tirage d'une tontine
 Route::get('tirages/{tontineId}/gagnant', [TirageController::class, 'showLastWinner'])->name('tirages.gagnant');
 Route::get('/tirages/resultats', [TirageController::class, 'resultats'])->name('tirages.resultats');
-Route::get('/test-notif', function () {
-    $user = \App\Models\User::find(1); // Remplace 1 par l'ID du user que tu veux tester
-    $user->notify(new \App\Notifications\TirageResultNotification(null, $user));
-
-    return 'Notification envoyée !';
-});

@@ -71,7 +71,7 @@ class ParticipantController extends Controller
         'nom' => $validated['nom'],
          'prenom' => $request->prenom,  // Assurez-vous de récupérer cette donnée depuis la demande (formulaire).
         'email' => $validated['email'],
-        'password' => bcrypt('defaultpassword'), // ou générer un mot de passe temporaire
+        'password' => bcrypt('0000'), // ou générer un mot de passe temporaire
         'telephone' => $validated['telephone'],  // Ajouter le téléphone
     ]);
 
@@ -88,7 +88,7 @@ class ParticipantController extends Controller
     ]);
 
     // Rediriger avec succès
-    return redirect()->route('participants.index')->with('success', 'Participant ajouté avec succès.');
+    return redirect()->route('participants.index')->with('success', 'Participant ajouté avec succès.le mot de passe par defaut c"est 4 zeros(0000).');
 }
 
 

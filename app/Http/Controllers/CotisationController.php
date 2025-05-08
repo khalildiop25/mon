@@ -296,12 +296,9 @@ public function cotisationsManquantes($tontineId)
     $datesManquantes = [];
 
     $startDate = Carbon::parse($tontine->dateDebut);
-
-    // Si une date de fin est définie, on la prend. Sinon, on prend la date actuelle.
     $now = now();
     $endDate = $tontine->dateFin ? Carbon::parse($tontine->dateFin) : $now;
 
-    // Si la date de fin est future, on ne veut pas aller au-delà d'aujourd'hui
     if ($endDate->greaterThan($now)) {
         $endDate = $now;
     }
@@ -315,33 +312,36 @@ public function cotisationsManquantes($tontineId)
                     ->exists();
 
                 if (!$exists) {
-                    $datesManquantes[] = $date->format('d/m/Y');
+                    $datesManquantes[] = [
+                        'label' => $date->format('d/m/Y'),
+                        'date' => $date->toDateString()
+                    ];
                 }
             }
             break;
 
-            case 'HEBDOMADAIRE':
-                $tontineEnd = $tontine->dateFin ? Carbon::parse($tontine->dateFin) : now();
-                for ($date = $startDate->copy(); $date <= $tontineEnd; $date->addWeek()) {
-                    $exists = Cotisation::where('idUser', $user->id)
-                        ->where('idTontine', $tontineId)
-                        ->whereBetween('created_at', [$date->copy(), $date->copy()->addWeek()->subDay()])
-                        ->exists();
-            
-                    if (!$exists) {
-                        $label = 'Semaine du ' . $date->format('d/m/Y');
-            
-                        // Vérifie si cette semaine est la dernière avant la fin
-                        $nextWeek = $date->copy()->addWeek();
-                        if ($nextWeek > $tontineEnd) {
-                            $label .= ' (dernière semaine avant la fin)';
-                        }
-            
-                        $datesManquantes[] = $label;
+        case 'HEBDOMADAIRE':
+            for ($date = $startDate->copy(); $date <= $endDate; $date->addWeek()) {
+                $exists = Cotisation::where('idUser', $user->id)
+                    ->where('idTontine', $tontineId)
+                    ->whereBetween('created_at', [$date->copy(), $date->copy()->addWeek()->subDay()])
+                    ->exists();
+
+                if (!$exists) {
+                    $label = 'Semaine du ' . $date->format('d/m/Y');
+                    $nextWeek = $date->copy()->addWeek();
+
+                    if ($nextWeek > $endDate) {
+                        $label .= ' (dernière semaine avant la fin)';
                     }
+
+                    $datesManquantes[] = [
+                        'label' => $label,
+                        'date' => $date->toDateString()
+                    ];
                 }
-                break;
-            
+            }
+            break;
 
         case 'MENSUEL':
             for ($date = $startDate->copy(); $date <= $endDate; $date->addMonth()) {
@@ -352,13 +352,52 @@ public function cotisationsManquantes($tontineId)
                     ->exists();
 
                 if (!$exists) {
-                    $datesManquantes[] = 'Mois de ' . $date->format('F Y');
+                    $datesManquantes[] = [
+                        'label' => 'Mois de ' . $date->translatedFormat('F Y'),
+                        'date' => $date->toDateString()
+                    ];
                 }
             }
             break;
     }
 
     return view('cotisations.cotisations_manquantes', compact('tontine', 'datesManquantes'));
+}
+
+public function storeManquante(Request $request)
+{
+    // Validation des données
+    $request->validate([
+        'tontine_id' => 'required|exists:tontines,id',
+        'date_retarde' => 'required|date',
+        'montant' => 'required|numeric|min:1',
+        'moyen_paiement' => 'required|in:ESPECES,WAVE,OM',
+    ]);
+
+    // Vérifie si une cotisation existe déjà pour cette date_retarde
+    $existingCotisation = \App\Models\Cotisation::where('idUser', auth()->id())
+        ->where('idTontine', $request->tontine_id)
+        ->whereDate('date_retarde', $request->date_retarde)
+        ->first();
+
+    // Si la cotisation est payée ou annulée, ne rien faire et afficher un message
+    if ($existingCotisation && in_array($existingCotisation->etat_paiement, ['PAYE', 'ANNULE'])) {
+        return redirect()->back()->with('message', 'Vous avez déjà payé ou annulé cette cotisation.');
+    }
+
+    // Créer la cotisation avec la date_retarde envoyée et l'état "EN_ATTENTE"
+    \App\Models\Cotisation::create([
+        'idUser' => auth()->id(),
+        'idTontine' => $request->tontine_id,
+        'montant' => $request->montant,
+        'moyen_paiement' => $request->moyen_paiement,
+        'date_retarde' => $request->date_retarde, // Date de la cotisation manquante
+        'etat_paiement' => 'EN_ATTENTE', // L'état initial est "EN_ATTENTE"
+        'created_at' => $request->date_retarde, 
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Cotisation enregistrée avec succès.');
 }
 
 

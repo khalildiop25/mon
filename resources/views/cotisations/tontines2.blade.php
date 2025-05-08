@@ -22,5 +22,5 @@
     @endif
 </div>
 <!-- Lien de retour -->
-<a href="{{ route('cotisations.tontines2') }}" class="btn btn-secondary mt-4">Retour aux cotisations</a>
+<a href="{{ route('home') }}" class="btn btn-secondary mt-4">Retour</a>
 @endsection

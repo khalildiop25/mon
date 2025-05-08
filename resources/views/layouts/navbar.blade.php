@@ -53,26 +53,32 @@
 
             <!-- Notifications -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-bell fa-fw"></i> Notifications
-                    @if(auth()->user()->unreadNotifications->count() > 0)
-                        <span class="badge badge-danger badge-counter">
-                            {{ auth()->user()->unreadNotifications->count() }}
-                        </span>
-                    @endif
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    @forelse(auth()->user()->unreadNotifications as $notification)
-                        <a class="dropdown-item" href="#">
-                            {{ $notification->data['message'] }}
-                        </a>
-                        @php $notification->markAsRead(); @endphp
-                    @empty
-                        <span class="dropdown-item text-muted">Aucune nouvelle notification</span>
-                    @endforelse
-                </div>
-            </li>
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell fa-fw"></i> Notifications
+
+        {{-- Badge rouge si l’utilisateur a des notifications non lues --}}
+        @if(auth()->user()->unreadNotifications->count() > 0)
+            <span class="badge badge-danger badge-counter">
+                {{ auth()->user()->unreadNotifications->count() }}
+            </span>
+        @endif
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        {{-- Boucle sur les notifications non lues --}}
+        @forelse(auth()->user()->unreadNotifications as $notification)
+            {{-- Chaque notification mène vers une route qui la marque comme lue --}}
+            <a class="dropdown-item" href="{{ route('notifications.read', $notification->id) }}">
+                {{ $notification->data['message'] }}
+            </a>
+        @empty
+            {{-- Message si aucune notification non lue --}}
+            <span class="dropdown-item text-muted">Aucune nouvelle notification</span>
+        @endforelse
+    </div>
+</li>
+
         @endif
 
         <!-- Menu utilisateur pour TOUS les utilisateurs connectés -->

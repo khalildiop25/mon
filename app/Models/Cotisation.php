@@ -13,6 +13,8 @@ class Cotisation extends Model
         'montant',
         'moyen_paiement',
         'etat_paiement',
+        'date_retarde',
+        'created_at',
     ];
 
     // Définir la relation avec le modèle User

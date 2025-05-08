@@ -9,6 +9,8 @@ use App\Models\Tontine;
 use App\Models\Tirage;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Notifications\TirageResultNotification;
+
 
 // Classe de commande artisan personnalisée
 class TirageAutomatique extends Command
@@ -67,6 +69,9 @@ class TirageAutomatique extends Command
                             'idUser' => $gagnant->idUser,
                             'idTontine' => $tontine->id,
                         ]);
+
+                        // ✅ Notification envoyée ici
+                        $gagnant->user->notify(new TirageResultNotification($tontine, $gagnant->user));
 
                         // Message affiché dans la console pour suivi
                         $this->info("Tirage effectué pour la tontine '{$tontine->libelle}' : gagnant - " . $gagnant->user->nom);
