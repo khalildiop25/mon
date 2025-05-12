@@ -5,6 +5,9 @@ use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\TontineController;
 use App\Http\Controllers\CotisationController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\TirageController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +23,13 @@ Route::get('connexion', [AuthController::class, 'create'])->name('auth.create');
 Route::post('connexion', [AuthController::class, 'auth'])->name('auth.store');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//Dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//Contact
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store']);
+//About
+Route::get('apropos', [AboutController::class, 'btnApropos'])->name('bouton.apropos');
 
 //tontine
 Route::get('tontines/index', [TontineController::class, 'index'])->name('tontines.index');  // Liste des tontines
@@ -32,6 +42,8 @@ Route::delete('tontines/{id}', [TontineController::class, 'destroy'])->name('ton
 Route::get('tontines/{id}/participer', [TontineController::class, 'participer'])->name('tontines.participer');
 Route::get('tontines/{id}/participants', [TontineController::class, 'participants'])->name('tontines.participants'); //route pour afficher les participants d'une tontine
 
+//Route pour permettre au visiteur de voir nos Tontines
+Route::get('tontines/nostontines', [TontineController::class, 'nostontines'])->name('tontines.nostontines');
 
 
 
@@ -85,6 +97,9 @@ Route::get('participants/{id}/tontines', [ParticipantController::class, 'showTon
 Route::post('/participants/{participantId}/attach', [ParticipantController::class, 'attachToTontine'])->name('participants.attachToTontine');
 //pour retirer un participant d'une tontine spécifique.
 Route::post('/participants/{participantId}/detach', [ParticipantController::class, 'detachFromTontine'])->name('participants.detachFromTontine');
+//Route pour permettre au participant de voir ses Tontines
+//nnjkRoute::get('participantsttt/{id}/tontines', [ParticipantController::class, 'showMyTontines'])->name('participant.mytontines');
+
 
 
 

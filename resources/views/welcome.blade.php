@@ -1,224 +1,206 @@
 @extends('app')
 
 @section('content')
-<div class="container-fluid">
-<div class="container-fluid bg-gradient-primary text-white py-2">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-            <h1 class="display-4 font-weight-bold">
-                <span class="text-warning">Bienvenue sur</span> <span class="text-light">Sunu Tontine</span>
-            </h1>
-            <p class="lead text-light mb-4">
-                La plateforme idéale pour gérer vos tontines en toute sécurité et transparence. Rejoignez-nous et découvrez comment faciliter la gestion de vos cotisations, prêts, et bien plus encore.
-            </p>
-          
+    <div class="container-fluid">
+
+
+        <!-- Vérification si l'utilisateur est connecté -->
+        @if (Auth::check())
+            <!-- Vérification du rôle de l'utilisateur -->
+            @if (Auth::user()->profil == 'GERANT')
+                <!-- Affichage du nom, prénom et imageCni pour le GERANT -->
+                <div class="alert alert-success">
+                    <div class="row align-items-center">
+                        <!-- Image CNI à gauche -->
+                        <div class="col-md-3">
+                            @if (Auth::user()->participant && Auth::user()->participant->imageCni)
+                                <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}" alt="Image CNI"
+                                    class="img-fluid w-100" style="max-width: 200px; border-radius: 8px;">
+                            @else
+                                <p class="text-muted">Aucune image CNI disponible.</p>
+                            @endif
+
+                        </div>
+                        <!-- Texte à droite -->
+                        <div class="col-md-9">
+                            <h3 class="display-3">Bonjour, {{ Auth::user()->prenom }} {{ Auth::user()->nom }} !</h3>
+                            <p class="fs-1">
+                                Bienvenue sur votre espace de gestion des tontines. Vous avez accès à toutes les
+                                fonctionnalités administratives pour gérer les tontines, les participants et plus encore.
+                            </p>
+                            <p class="fs-4">
+                                Votre rôle de Gérant vous permet de superviser, organiser et gérer l'ensemble des activités
+                                liées aux tontines. Assurez-vous que tout fonctionne correctement et que les participants
+                                puissent suivre leurs cotisations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+    </div>
+@elseif(Auth::user()->profil == 'PARTICIPANT' && Auth::user()->participant)
+    <div class="container py-5" style="background-color:#cddcf4;">
+        <!-- En-tête principal -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">🎉 Bienvenue sur Sunu Kalpe !</h1>
+            <p class="fs-5 text-muted">L’univers des tontines simplifié rien que pour vous.</p>
+        </div>
+
+        <!-- Carte de bienvenue -->
+        <div class="card shadow-lg border-0">
+            <div class="row g-0 align-items-center">
+                <!-- Image -->
+                <div class="col-md-6">
+                    <img src="{{ asset('images/part3.jpg') }}" alt="Bienvenue" class="img-fluid rounded-start w-100 h-100"
+                        style="object-fit: cover;">
+                </div>
+
+                <!-- Message -->
+                <div class="col-md-6 p-5">
+                    <h2 class="fw-bold mb-3">Bonjour, {{ Auth::user()->participant->prenom }}
+                        {{ Auth::user()->participant->nom }} 👋</h2>
+                    <p class="fs-5">
+                        Bienvenue dans votre espace personnel. Ici, vous pouvez :
+                    <ul class="fs-6">
+                        <li>📌 Suivre vos cotisations</li>
+                        <li>👥 Voir vos tontines actives</li>
+                        <li>🎯 Participer aux tirages</li>
+                        <li>📈 Suivre votre progression financière</li>
+                    </ul>
+                    </p>
+                    <a href="{{ route('participant.tontines', auth()->user()->participant->id) }}"
+                        class="btn btn-primary btn-lg mt-3">
+                        Accéder à mes tontines
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
 
-    @if(Auth::check())
-        @if(Auth::user()->profil == 'GERANT')
-            <div class="alert alert-success shadow-sm rounded-lg mb-4" style="border-left: 5px solid #f8b800;">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        @if(Auth::user()->participant && Auth::user()->participant->imageCni)
-                            <img src="{{ asset('storage/' . Auth::user()->participant->imageCni) }}" alt="Image CNI" class="img-fluid w-100" style="max-width: 200px; border-radius: 8px;">
-                        @else
-                            <p class="text-muted">Aucune image CNI disponible.</p>
-                        @endif
-                    </div>
-                    <div class="col-md-9">
-                        <h3 class="display-3 font-weight-bold text-dark mb-4" style="letter-spacing: 2px;">Bonjour, {{ Auth::user()->prenom }} {{ Auth::user()->nom }} !</h3>
-                        <p class="fs-1">
-                            Bienvenue sur votre espace de gestion des tontines. Vous avez accès à toutes les fonctionnalités administratives pour gérer les tontines, les participants et plus encore.
-                        </p>
-                        <p class="fs-4">
-                            Votre rôle de Gérant vous permet de superviser, organiser et gérer l'ensemble des activités liées aux tontines. Assurez-vous que tout fonctionne correctement et que les participants puissent suivre leurs cotisations.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        @elseif(Auth::user()->profil == 'PARTICIPANT')
-            <div class="alert alert-info text-center shadow-sm rounded-lg mb-4" style="border-left: 5px solid #f8b800;">
-                <p class="fs-1">Bienvenue dans votre espace participant. Vous pouvez consulter vos tontines en cours, suivre vos cotisations et plus encore.</p>
-            </div>
 
-            <div class="row align-items-center mb-5">
-                <div class="col-md-6">
-                    <img src="{{ asset('images/accueil.jpg') }}" alt="Image d'accueil" class="img-fluid rounded shadow-lg" style="max-height: 500px; object-fit: cover;">
-                </div>
-                <div class="col-md-6">
-                <h1 class="display-6 text-primary font-weight-bold">
-                Bienvenue sur votre espace personnel,
-Gérez vos tontines facilement et en toute sécurité.
-Félicitations, vous êtes désormais connecté à votre compte Sunu Tontine !
- Vous avez accès à toutes les fonctionnalités qui vous permettent de gérer vos tontines en toute simplicité.
 
-                </div>
-            </div>
 
-           <div class="mt-5"> 
-    <h2 class="text-center display-3 text-secondary mb-4">Toutes nos Tontines</h2>
 
-    @if($tontines->isEmpty())
-        <p class="text-center fs-3">Aucune tontine n'est disponible pour l'instant.</p>
-    @else
-        <div class="row">
-            @foreach($tontines as $index => $tontine)
-                @if($index % 3 == 0 && $index != 0)
-                    </div><div class="row">
-                @endif
-                <div class="col-md-4 mb-4 fade-in ">
-                    <div class="card h-100 shadow-sm rounded-lg border-0">
-                        @php
-                            $imageSrc = $tontine->images->isNotEmpty() 
-                                ? asset('storage/' . $tontine->images->first()->nomImage)
-                                : asset('images/default-tontine.jpg');
-                        @endphp
+    @include('tontines.partnostont')
 
-                        <img src="{{ $imageSrc }}" 
-                             class="card-img-top rounded-top object-cover" 
-                             alt="Image de la tontine"
-                             style="height: 200px; width: 100%; cursor: pointer;" 
-                             onclick="openModal('{{ $imageSrc }}')">
+    <script>
+        document.querySelectorAll('.toggle-details').forEach(button => {
+            button.addEventListener('click', () => {
+                const details = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                const isVisible = details.style.display === 'block';
 
-                        <div class="card-body text-center">
-                            <h5 class="card-title font-weight-bold">{{ $tontine->libelle }}</h5>
-                            <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100 rounded-pill shadow-sm hover-shadow">Voir la Tontine</a>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+                details.style.display = isVisible ? 'none' : 'block';
+                icon.classList.toggle('bi-chevron-down', isVisible);
+                icon.classList.toggle('bi-chevron-up', !isVisible);
+            });
+        });
+    </script>
     @endif
-</div>
-
-<!-- Lightbox Modal -->
-<!-- Lightbox Modal -->
-<div id="lightboxModal"
-     style="position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8);
-            display: none; justify-content: center; align-items: center;
-            z-index: 9999;">
-    
-    <img id="modalImage"
-         src=""
-         style="max-width: 90vw; max-height: 90vh; border-radius: 10px; box-shadow: 0 0 15px #000;">
-    
-    <!-- Bouton pour fermer -->
-    <span onclick="closeModal()"
-          style="position: absolute; top: 20px; right: 30px;
-                 font-size: 30px; color: white; cursor: pointer; font-weight: bold;">×</span>
-</div>
+    <!--</div>-->
+@else
+    <section class="relative flex items-center justify-center text-white text-center py-20"
+        style="background: linear-gradient(135deg, rgba(26, 54, 93, 0.8), rgba(45, 55, 72, 0.8)),
+                url('{{ asset('images/imgAccueil.jpg') }}') center center / contain no-repeat; min-height: 50vh;">
+        <div class="z-10 max-w-3xl px-6">
+            <h1 class="text-5xl font-bold mb-4">Épargnez, investissez, grandissez ensemble.</h1>
+            <p class="text-xl mb-6">Rejoignez une communauté financière solidaire et atteignez vos objectifs grâce à la
+                tontine moderne et digitale.</p>
+            {{-- <a href="{{ route('inscription.index') }}" class="bg-white text-blue-700 hover:bg-blue-800 hover:text-white py-3 px-6 rounded-full font-semibold transition">Rejoindre une tontine</a> --}}
+            <a href="{{ route('tontines.nostontines') }}"
+                class="text-white py-3 px-6 rounded-full font-semibold transition no-underline hover:no-underline"
+                style="background-color: #E67E22;" onmouseover="this.style.backgroundColor='#c59d5f'"
+                onmouseout="this.style.backgroundColor='#E67E22'">
+                Rejoindre une tontine
+            </a>
 
 
-<script>
-    function openModal(src) {
-        document.getElementById('modalImage').src = src;
-        document.getElementById('lightboxModal').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Bloque le scroll
-    }
 
-    function closeModal() {
-        document.getElementById('lightboxModal').style.display = 'none';
-        document.getElementById('modalImage').src = '';
-        document.body.style.overflow = 'auto'; // Restaure le scroll
-    }
-</script>
-
-
-        @endif
-    @else
-        <div class="alert alert-info text-center shadow-sm rounded-lg mb-4" style="border-left: 5px solid #f8b800;">
-            
-            <p class="fs-1">Bienvenue dans votre espace participant. Vous pouvez consulter les tontines disponibles et plus encore.</p>
         </div>
-        
-        <div class="row align-items-center mb-5">
-            <div class="col-md-6">
-                <img src="{{ asset('images/accueil.jpg') }}" alt="Image d'accueil" class="img-fluid rounded shadow-lg" style="max-height: 500px; object-fit: cover;">
-            </div>
-            <div class="col-md-6">
-            <h1 class=" display-6 text-warning">
-            🏡 Bienvenue sur Sunu Tontine.
-Une plateforme dédiée à la gestion des tontines, permettant aux utilisateurs d’organiser et de suivre leurs cotisations, prêts, et bien plus encore, de manière simple et intuitive.
- Que vous soyez à la recherche d’une tontine existante ou que vous souhaitiez en savoir plus sur notre service, vous êtes au bon endroit.
-</h1>
+    </section>
 
-            </div>
+
+
+    <!-- Comment ça fonctionne -->
+
+    <section class="how-it-works py-12 bg-gray-50">
+        {{-- <h2 class="text-3xl font-bold text-center mb-8">Comment ça fonctionne ?</h2> --}}
+        <div style="text-align: center;">
+            <h2 class="titre-souligne ">Comment ça fonctionne ?</h2>
         </div>
 
-        <div class="mt-5"> 
-    <h2 class="text-center display-3 text-secondary mb-4">Toutes nos Tontines</h2>
 
-    @if($tontines->isEmpty())
-        <p class="text-center fs-3">Aucune tontine n'est disponible pour l'instant.</p>
-    @else
-        <div class="row">
-            @foreach($tontines as $index => $tontine)
-                @if($index % 3 == 0 && $index != 0)
-                    </div><div class="row">
-                @endif
-                <div class="col-md-4 mb-4 fade-in ">
-                    <div class="card h-100 shadow-sm rounded-lg border-0">
-                        @php
-                            $imageSrc = $tontine->images->isNotEmpty() 
-                                ? asset('storage/' . $tontine->images->first()->nomImage)
-                                : asset('images/default-tontine.jpg');
-                        @endphp
 
-                        <img src="{{ $imageSrc }}" 
-                             class="card-img-top rounded-top object-cover" 
-                             alt="Image de la tontine"
-                             style="height: 200px; width: 100%; cursor: pointer;" 
-                             onclick="openModal('{{ $imageSrc }}')">
+        <div class="steps-grid grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
 
-                        <div class="card-body text-center">
-                            <h5 class="card-title font-weight-bold">{{ $tontine->libelle }}</h5>
-                            <a href="{{ route('tontines.show', $tontine->id) }}" class="btn bg-gold text-white w-100 rounded-pill shadow-sm hover-shadow">Voir la Tontine</a>
-                        </div>
-                    </div>
+            <div class="step-card p-6 bg-white rounded-lg shadow-md text-center transition duration-300">
+                <div class="step-icon text-4xl text-orange-500 mb-4">
+                    <i class="fas fa-user-plus"></i>
                 </div>
-            @endforeach
+                <h3 class="text-xl font-semibold mb-2">1. Inscription</h3>
+                <p>Créez votre compte en quelques clics et complétez votre profil.</p>
+            </div>
+
+            <div class="step-card p-6 bg-white rounded-lg shadow-md text-center transition duration-300">
+                <div class="step-icon text-4xl text-orange-500 mb-4">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">2. Contribution</h3>
+                <p>Participez régulièrement selon les modalités choisies.</p>
+            </div>
+
+            <div class="step-card p-6 bg-white rounded-lg shadow-md text-center transition duration-300">
+                <div class="step-icon text-4xl text-orange-500 mb-4">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">3. Réception</h3>
+                <p>Recevez votre part à la période définie dans le groupe.</p>
+            </div>
+
         </div>
+
+    </section>
+
+
+    {{-- </section> --}}
+
+
+    <!-- Avantages -->
+    <section class="benefits">
+
+        <div style="text-align: center;">
+            <h2 class="titre-souligne">Pourquoi choisir notre plateforme ?</h2>
+        </div>
+        <p class="section-subtitle">Nous réinventons la tontine avec des outils digitaux, de la transparence et une
+            flexibilité totale.</p>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <h3>Sécurisée</h3>
+                <p>Toutes les transactions sont cryptées et protégées.</p>
+            </div>
+            <div class="benefit-card">
+                <h3>Flexible</h3>
+                <p>Choisissez la durée, la fréquence et le montant qui vous convient.</p>
+            </div>
+            <div class="benefit-card">
+                <h3>Communautaire</h3>
+                <p>Rejoignez un réseau de membres fiables et engagés.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <h2>Prêt à commencer votre aventure financière ?</h2>
+        <p>Inscrivez-vous dès aujourd'hui et rejoignez des milliers d'utilisateurs satisfaits.</p>
+        {{-- <button class="cta-button">Créer un compte</button> --}}
+        <button class="cta-button" onclick="window.location.href='{{ route('inscription.index') }}'">Créer un
+            compte</button>
+
+    </section>
+
+
+
     @endif
-</div>
-
-<!-- Lightbox Modal -->
-<!-- Lightbox Modal -->
-<div id="lightboxModal"
-     style="position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8);
-            display: none; justify-content: center; align-items: center;
-            z-index: 9999;">
-    
-    <img id="modalImage"
-         src=""
-         style="max-width: 90vw; max-height: 90vh; border-radius: 10px; box-shadow: 0 0 15px #000;">
-    
-    <!-- Bouton pour fermer -->
-    <span onclick="closeModal()"
-          style="position: absolute; top: 20px; right: 30px;
-                 font-size: 30px; color: white; cursor: pointer; font-weight: bold;">×</span>
-</div>
-
-
-<script>
-    function openModal(src) {
-        document.getElementById('modalImage').src = src;
-        document.getElementById('lightboxModal').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Bloque le scroll
-    }
-
-    function closeModal() {
-        document.getElementById('lightboxModal').style.display = 'none';
-        document.getElementById('modalImage').src = '';
-        document.body.style.overflow = 'auto'; // Restaure le scroll
-    }
-</script>
-    @endif
-</div>
+   <!-- </div>-->
 @endsection

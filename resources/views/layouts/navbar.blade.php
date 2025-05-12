@@ -1,4 +1,23 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow navbar-gold">
+ <!-- 🔽 Ajoute ton logo ici, à gauche -->
+
+ <!-- Vérification du rôle de l'utilisateur -->
+
+@auth
+    @if(auth()->user()->profil !== 'GERANT')
+        <a class="navbar-brand d-flex align-items-center ml-3" href="{{ route('home') }}">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Logo" style="height: 50px;">
+        </a>
+    @endif
+@else
+
+        <a class="navbar-brand d-flex align-items-center ml-3" href="{{ route('home') }}">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Logo" style="height: 50px;">
+        </a>
+
+@endauth
+
+
 
     <div class="container">
         <!-- Sidebar Toggle (Topbar) -->
@@ -8,13 +27,32 @@
 
         <!-- Navbar Links -->
         <ul class="navbar-nav ml-auto">
+
+
         <li class="nav-item">
           <a class="nav-link" href="{{ route('home') }}">
             <i class="fas fa-home fa-fw"></i> Accueil
           </a>
+          @guest
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('bouton.apropos') }}">
+                <i class="fas fa-info-circle"></i> <span>À propos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('tontines.nostontines')}}">
+
+                <i class="fas fa-piggy-bank"></i> <span>Nos tontines</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('contact') }}">
+                <i class="fas fa-phone"></i> <span>Nous contacter</span>
+            </a>
         </li>
 
-    @guest
+
         <!-- Liens pour les invités -->
         <li class="nav-item">
             <a class="nav-link" href="{{ route('auth.create') }}">
@@ -28,80 +66,34 @@
         </li>
 
     @else
-        @if(Auth::user()->profil == 'PARTICIPANT')
-            <!-- Liens spécifiques au participant -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('participant.tontines', auth()->user()->participant->id) }}">
-                    <i class="fas fa-users fa-fw"></i> Mes tontines
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('cotisations.Participant', auth()->user()->id) }}">
-                    <i class="fas fa-credit-card fa-fw"></i> Effectuer une cotisation
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('cotisations.user', auth()->user()->id) }}">
-                    <i class="fas fa-list fa-fw"></i> Voir l'état de ma cotisation
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('tirage.form', auth()->user()->id) }}">
-                    <i class="fas fa-cogs fa-fw"></i> Participer au tirage
-                </a>
-            </li>
 
-            <!-- Notifications -->
-            <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw"></i> Notifications
 
-        {{-- Badge rouge si l’utilisateur a des notifications non lues --}}
-        @if(auth()->user()->unreadNotifications->count() > 0)
-            <span class="badge badge-danger badge-counter">
-                {{ auth()->user()->unreadNotifications->count() }}
-            </span>
-        @endif
-    </a>
+        @if(Auth::user()->profil === 'PARTICIPANT')
+       @include('layouts.navbarPart')
+@endif
 
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-        {{-- Boucle sur les notifications non lues --}}
-        @forelse(auth()->user()->unreadNotifications as $notification)
-            {{-- Chaque notification mène vers une route qui la marque comme lue --}}
-            <a class="dropdown-item" href="{{ route('notifications.read', $notification->id) }}">
-                {{ $notification->data['message'] }}
-            </a>
-        @empty
-            {{-- Message si aucune notification non lue --}}
-            <span class="dropdown-item text-muted">Aucune nouvelle notification</span>
-        @endforelse
-    </div>
-</li>
-
-        @endif
 
         <!-- Menu utilisateur pour TOUS les utilisateurs connectés -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->nom }}</span>
-                <img class="img-profile rounded-circle" 
-                     src="{{ Auth::user()->participant && Auth::user()->participant->imageCni 
-                            ? asset('storage/' . Auth::user()->participant->imageCni) 
-                            : asset('images/default-user.png') }}">
+                <span class="mr-2 d-none d-lg-inline text-black-600 small"><strong>{{ Auth::user()->nom }}</strong></span>
+                <img class="img-profile rounded-circle"
+                     src="{{ Auth::user()->participant && Auth::user()->participant->imageCni
+                            ? asset('storage/' . Auth::user()->participant->imageCni)
+                            : asset('images/default-user.jpg') }}">
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="{{ route('profile') }}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-black-400"></i> <b>Profil</b>
                 </a>
                 <a class="dropdown-item" href="{{ route('settings') }}">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Paramètres
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-black-400"></i> <b>Paramètres</b>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Déconnexion
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-black-400"></i> <b>Déconnexion</b>
                 </a>
             </div>
         </li>

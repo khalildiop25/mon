@@ -163,4 +163,12 @@ public function participants($id)
 
         return redirect()->route('tontines.index')->with('success', 'Tontine supprimée avec succès.');
     }
+    
+    public function nostontines()
+{
+    // On récupère toutes les tontines avec leurs images associées
+    $tontines = Tontine::with('images')->get();
+
+    return view('tontines.nostontines', compact('tontines'));
+}
 }

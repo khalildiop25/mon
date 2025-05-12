@@ -38,7 +38,7 @@ class TirageController extends Controller
         $gagnant = $participants->random();
 
         // Vérifie s’il a déjà gagné (optionnel)
-        $dejaTire = Tirage::where('idUser', $gagnant->user_id)
+        $dejaTire = Tirage::where('idUser', $gagnant->idUser)
                           ->where('idTontine', $tontineId)
                           ->exists();
 
@@ -48,7 +48,7 @@ class TirageController extends Controller
 
         // Enregistrer le tirage
         Tirage::create([
-            'idUser' => $gagnant->user_id,
+            'idUser' => $gagnant->idUser,
             'idTontine' => $tontineId,
         ]);
 
